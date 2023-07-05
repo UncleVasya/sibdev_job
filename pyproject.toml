@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "sibdev-job"
+version = "0.1.0"
+description = "Test task for sibdev company."
+authors = ["UncleVasya <unclevasyaai@gmail.com>"]
+readme = "README.md"
+packages = [{include = "sibdev_job"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Django = "4.2.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
