@@ -10,6 +10,7 @@ packages = [{include = "sibdev_job"}]
 python = "^3.10"
 Django = "^4.2.3"
 gunicorn = "^20.1.0"
+djangorestframework = "^3.14.0"
 
 
 [build-system]
