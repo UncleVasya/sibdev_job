@@ -29,14 +29,19 @@ class DealsUploadView(views.APIView):
         try:
             text = file.read().decode('utf-8')
             data = csv.DictReader(text.splitlines())
-        except UnicodeDecodeError:
+        except (UnicodeDecodeError, AttributeError):
             raise ValidationError('Формат файла не поддерживается.')
+
 
         try:
             self._parse_deals_data_from_csv(data)
-        except KeyError as e:
+        except (KeyError, ValueError) as e:
             raise ValidationError(
                 f'Ошибка в данных: {e.__class__.__name__} ({e})'
+            )
+        except Exception as e:
+            raise ValidationError(
+                f'Неизвестная ошибка при обработке файла: {e.__class__.__name__} ({e})'
             )
 
         return Response(data, status=status.HTTP_200_OK)
