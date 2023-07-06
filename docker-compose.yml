@@ -1,13 +1,13 @@
 version: '3.8'
 
-services:
-  x-python-containers: &python-containers
-    build: .
-    volumes:
-      - .:/app
-    env_file:
-      - .env.dev
+x-python-containers: &python-containers
+  build: .
+  volumes:
+    - .:/app
+  env_file:
+    - .env.dev
 
+services:
   web:
     <<: *python-containers
     command: gunicorn sibdev_job.wsgi --bind 0.0.0.0:8000
