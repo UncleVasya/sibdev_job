@@ -6,11 +6,14 @@ from rest_framework.response import Response
 from rest_framework import views
 from rest_framework import generics
 from django.db import transaction
-from django.db.models import Sum, Value, Prefetch
+from django.db.models import Sum
+from django.views.decorators.cache import cache_page
 from rest_framework.exceptions import ValidationError
-from app.deals.api import serializers
+from app.deals.api import serializers, const
 from app.deals.api.paginators import SimpleLimitPagination
 from app.deals.models import Customer, Gem, Deal
+from django.core.cache import cache
+from django.utils.decorators import method_decorator
 
 
 class DealsUploadView(views.APIView):
@@ -44,7 +47,13 @@ class DealsUploadView(views.APIView):
                 f'Неизвестная ошибка при обработке файла: {e.__class__.__name__} ({e})'
             )
 
-        return Response(data, status=status.HTTP_200_OK)
+        # успешно импортировали сделки в базу,
+        # нужно очистить кеш страницы с данными о сделках
+        cache.delete_many(
+            keys=cache.keys(f'*{const.top_customers_cache_key_prefix}*')
+        )
+
+        return Response(status=status.HTTP_200_OK)
 
     @staticmethod
     def _parse_deals_data_from_csv(data: csv.DictReader):
@@ -83,6 +92,13 @@ class TopCustomersView(generics.ListAPIView):
     """Эндпоинт для отображение наиболее потратившихся покупателей."""
     serializer_class = serializers.TopCustomersSerializer
     pagination_class = SimpleLimitPagination
+
+    @method_decorator(cache_page(
+        const.top_customers_cache_key_duration,
+        key_prefix=const.top_customers_cache_key_prefix
+    ))
+    def get(self, *args, **kwargs):
+        return super().get(*args, **kwargs)
 
     def get_queryset(self):
         qs = Customer.objects.annotate(
