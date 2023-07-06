@@ -1,9 +1,9 @@
+from django.db.models import (Count, F, Prefetch, Q, Value,
+                              prefetch_related_objects)
 from rest_framework import serializers
-from django.db.models import prefetch_related_objects, Prefetch, Count, Q, F, Value
 
-from sibdev_job import const
 from app.deals.models import Customer, Gem
-
+from sibdev_job import const
 
 
 class DealsUploadSerializer(serializers.Serializer):

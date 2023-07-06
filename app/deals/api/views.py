@@ -1,19 +1,18 @@
 import csv
 import datetime
 
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework import views
-from rest_framework import generics
+from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Sum
-from django.views.decorators.cache import cache_page
-from rest_framework.exceptions import ValidationError
-from app.deals.api import serializers, const
-from app.deals.api.paginators import SimpleLimitPagination
-from app.deals.models import Customer, Gem, Deal
-from django.core.cache import cache
 from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from rest_framework import generics, status, views
+from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
+
+from app.deals.api import const, serializers
+from app.deals.api.paginators import SimpleLimitPagination
+from app.deals.models import Customer, Deal, Gem
 
 
 class DealsUploadView(views.APIView):
