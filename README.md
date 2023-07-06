@@ -41,7 +41,9 @@ http://localhost:8000/api/top-customers/?limit=10
 # Запуск тестов:
 
 `docker-compose run autotests`
-or
+
+или
+
 `make test`
 
 ## Что было сделано по заданию.
