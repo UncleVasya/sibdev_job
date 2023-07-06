@@ -25,7 +25,7 @@ class DealsUploadView(views.APIView):
     serializer_class = serializers.DealsUploadSerializer
 
     def post(self, request, version=None):
-        file = request.FILES.get('deals_file')
+        file = request.FILES.get('deals')
         if not file:
             raise ValidationError('Отсутствует файл со сделками.')
 
@@ -49,6 +49,9 @@ class DealsUploadView(views.APIView):
 
         # успешно импортировали сделки в базу,
         # нужно очистить кеш страницы с данными о сделках
+        # TODO: В будущем если пбудут предусмотрены другие способы
+        #       обновления данных (админка, скрипт, др.), то логично будет
+        #       повесить очищение кэша на сигнал при сохранении моделей.
         cache.delete_many(
             keys=cache.keys(f'*{const.top_customers_cache_key_prefix}*')
         )

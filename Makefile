@@ -7,5 +7,8 @@ run:
 test:
 	docker-compose up autotests
 
-.PHONY: build run test
+bash:
+	docker-compose run web bash
+
+.PHONY: build run test bash
 

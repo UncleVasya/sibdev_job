@@ -1,6 +1,6 @@
 FROM python:3.10-slim-bullseye as base
 
-# ----- builder -----
+# ----- сборщик -----
 FROM base as builder
 
 WORKDIR /app
@@ -8,11 +8,11 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# install package dependenices
+# установка системных зависимостей
 RUN apt-get update && apt-get install --no-install-recommends -y \
   libpq-dev
 
-# install project dependencies
+# установка зависимостей проекта
 RUN pip install --upgrade pip
 
 RUN pip install poetry
@@ -24,22 +24,22 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels -r requirements.txt
 RUN pip install -r requirements.txt
 
 
-# ----- final -----
+# ----- финальный образ -----
 FROM base
 
 WORKDIR /app
 
-# netcat to check for postgres readiness
+# netcat для проверки готовности postgresql
 RUN apt-get update && apt-get install --no-install-recommends -y \
   netcat
 
-# copy dependencies
+# копируем зависимости
 COPY --from=builder /wheels /wheels
 RUN pip install --no-cache /wheels/*
 
-# copy project
+# копируем код проекта
 COPY . .
 
-# run entrypoint.sh
+# запускаем entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]

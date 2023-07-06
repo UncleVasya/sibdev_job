@@ -1,11 +1,15 @@
 from rest_framework.pagination import LimitOffsetPagination
 from sibdev_job import const
+from rest_framework.response import Response
 
 
 class SimpleLimitPagination(LimitOffsetPagination):
     """
-    Пагинатор, который устанавливает лимит на общее количество
-    отображаемых записей и отключает параметр оффсет.
+    Пагинатор, который:
+    - устанавливает лимит на общее количество отображаемых записей
+    - и отключает параметр оффсет;
+    - приводит список объектов в соответствие с требованиями задачи
+      (данные хранятся в поле response)
     """
     default_limit = const.top_customers_limit
 
@@ -16,3 +20,6 @@ class SimpleLimitPagination(LimitOffsetPagination):
 
     def get_offset(self, request):
         return 0
+
+    def get_paginated_response(self, data):
+        return Response(dict({'response': data}))

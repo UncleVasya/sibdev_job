@@ -8,7 +8,7 @@ from app.deals.models import Customer, Gem
 
 class DealsUploadSerializer(serializers.Serializer):
     """Сериализатор для загрузки файла со сделками."""
-    deals_file = serializers.FileField()
+    deals = serializers.FileField()
 
 
 class GemNameSerializer(serializers.ModelSerializer):
@@ -57,8 +57,3 @@ class TopCustomersSerializer(serializers.ModelSerializer):
 
     def get_gems(self, obj):
         return [f'{gem.name}' for gem in obj.gems.all()]
-
-
-
-
-
