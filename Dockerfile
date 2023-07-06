@@ -12,15 +12,14 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update && apt-get install --no-install-recommends -y \
   libpq-dev
 
-# install dependencies
+# install project dependencies
 RUN pip install --upgrade pip
 
 RUN pip install poetry
-#COPY ./pyproject.toml .
-#COPY ./poetry.lock .
-#RUN poetry export --output requirements.txt
+COPY ./pyproject.toml .
+COPY ./poetry.lock .
+RUN poetry export --output requirements.txt
 
-COPY ./requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 RUN pip install -r requirements.txt
 
