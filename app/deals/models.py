@@ -1,4 +1,5 @@
 from decimal import Decimal
+from typing import List
 
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -46,3 +47,13 @@ class Deal(models.Model):
         validators=[MinValueValidator(Decimal('0.01'))]
     )
     date = models.DateTimeField()
+
+    def to_list(self) -> List:
+        """Возвращает данные сделки в виде списка значений."""
+        return [
+            self.customer.username,
+            self.item.name,
+            self.total_cost,
+            self.quantity,
+            self.date
+        ]

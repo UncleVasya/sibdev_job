@@ -32,6 +32,8 @@ services:
     command: python manage.py test
     depends_on:
       - db
+    environment:
+      TESTING: 1
 
 volumes:
   postgres_data:

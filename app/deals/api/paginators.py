@@ -23,4 +23,4 @@ class SimpleLimitPagination(LimitOffsetPagination):
         return 0
 
     def get_paginated_response(self, data):
-        return Response(dict({'response': data}))
+        return Response({'response': data})

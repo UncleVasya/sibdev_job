@@ -1,0 +1,19 @@
+[run]
+branch = True
+include =
+        ./*
+omit =
+        */tests/*
+        *__init__*
+        */migrations/*
+        settings.py
+        const.py
+        manage.py
+        urls.py
+        apps.py
+[report]
+exclude_lines =
+        pragma: no cover
+        if __name__ == .__main__.:
+[html]
+directory = coverage_html_report

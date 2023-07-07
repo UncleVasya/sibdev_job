@@ -23,7 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-zkk53o!-et3(9d*$tg)vj5e+g=!sbad6rik&qi6bk9-n&)^qtk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# TODO: использовать environ
+DEBUG = int(os.getenv('DEBUG', 1))
+TESTING = int(os.getenv('TESTING', 0))
 
 ALLOWED_HOSTS = []
 
@@ -107,16 +109,21 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 CACHES = {
-        "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": "redis://redis:6379/",
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient"
-            },
-        }
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis:6379/',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient'
+        },
     }
+}
+
+# Для тестов используем эмулятор redis-a, чтобы не требовать поднятый настоящий
+if TESTING:
+    from fakeredis import FakeConnection
+    CACHES['default']['BACKEND'] = 'django.core.cache.backends.redis.RedisCache'
+    CACHES['default']['OPTIONS']['CONNECTION_CLASS'] = FakeConnection
 
 
 # Internationalization

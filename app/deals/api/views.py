@@ -26,21 +26,32 @@ class DealsUploadView(views.APIView):
     def post(self, request, version=None):
         file = request.FILES.get('deals')
         if not file:
-            raise ValidationError('Отсутствует файл со сделками.')
+            raise ValidationError({
+                    'detail': 'Отсутствует файл со сделками.',
+                    'code': 'file_missing',
+                })
 
         try:
             text = file.read().decode('utf-8')
+            if not text:
+                raise ValidationError({
+                    'detail': 'В файле отсутствуют данные.',
+                    'code': 'file_empty',
+                })
             data = csv.DictReader(text.splitlines())
         except (UnicodeDecodeError, AttributeError):
-            raise ValidationError('Формат файла не поддерживается.')
-
+            raise ValidationError({
+                'detail': 'Формат файла не поддерживается.',
+                'code': 'file_wrong_format',
+            })
 
         try:
             self._parse_deals_data_from_csv(data)
         except (KeyError, ValueError) as e:
-            raise ValidationError(
-                f'Ошибка в данных: {e.__class__.__name__} ({e})'
-            )
+            raise ValidationError({
+                'detail': f'Ошибка в данных: {e.__class__.__name__} ({e})',
+                'code': 'file_corrupt_data',
+            })
         except Exception as e:
             raise ValidationError(
                 f'Неизвестная ошибка при обработке файла: {e.__class__.__name__} ({e})'
@@ -48,7 +59,7 @@ class DealsUploadView(views.APIView):
 
         # успешно импортировали сделки в базу,
         # нужно очистить кеш страницы с данными о сделках
-        # TODO: В будущем если пбудут предусмотрены другие способы
+        # TODO: В будущем если будут предусмотрены другие способы
         #       обновления данных (админка, скрипт, др.), то логично будет
         #       повесить очищение кэша на сигнал при сохранении моделей.
         cache.delete_many(
