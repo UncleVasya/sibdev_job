@@ -121,7 +121,7 @@ class DealsUploadViewTestCase(TestCase):
         self.assert_data_from_deals(self.deals)
 
     def test_deals_addition_success(self):
-        """Проверяет успешную добавление сделок в уже заполненную базу."""
+        """Проверяет успешное добавление сделок в уже заполненную базу."""
         self.upload_deals(self.deals)
         deals_count = models.Deal.objects.count()
 
