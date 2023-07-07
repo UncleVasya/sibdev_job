@@ -9,7 +9,7 @@ from sibdev_job import const
 
 class Customer(models.Model):
     """Модель покупателя"""
-    username = models.CharField(max_length=255)
+    username = models.CharField(max_length=255, unique=True)
     gems = models.ManyToManyField(
         to='Gem',
         related_name='customers',
@@ -22,7 +22,7 @@ class Customer(models.Model):
 
 class Gem(models.Model):
     """Модель драгоценного камня"""
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return self.name
