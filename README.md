@@ -105,20 +105,21 @@ http://localhost:8000/api/top-customers/?limit=10
 - для тестовой конфигурации используется эмулятор redis (fakeredis), чтобы можно было тестировать работу с кешом, не требуя при этом запущенный redis.
 - подключен coverage для тестов (при запуске через make test)
 
+```
+----------------------------------------------------------------------
+Ran 10 tests in 1.688s
 
-    ----------------------------------------------------------------------
-    Ran 10 tests in 1.688s
-    
-    OK
-    Destroying test database for alias 'default'...
-    Name                           Stmts   Miss Branch BrPart  Cover
-    ----------------------------------------------------------------
-    app/deals/api/paginators.py       13      0      0      0   100%
-    app/deals/api/serializers.py      24      0      4      0   100%
-    app/deals/api/views.py            58      4     12      2    91%
-    app/deals/models.py               22      2      0      0    91%
-    ----------------------------------------------------------------
-    TOTAL                            117      6     16      2    94%
+OK
+Destroying test database for alias 'default'...
+Name                           Stmts   Miss Branch BrPart  Cover
+----------------------------------------------------------------
+app/deals/api/paginators.py       13      0      0      0   100%
+app/deals/api/serializers.py      24      0      4      0   100%
+app/deals/api/views.py            58      4     12      2    91%
+app/deals/models.py               22      2      0      0    91%
+----------------------------------------------------------------
+TOTAL                            117      6     16      2    94%
+```
 
 ### Что можно улучшить
 - сейчас кеш страниц сбрасывается только при импорте данных через api. Можно сбрасывать кеш при любым изменениях объектов, например через сигналы.
