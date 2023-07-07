@@ -2,10 +2,12 @@ import csv
 import datetime
 import random
 from collections import defaultdict
+from decimal import Decimal
 from io import StringIO
 from typing import List
 from unittest import mock
-from decimal import Decimal
+
+from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
@@ -16,9 +18,9 @@ from rest_framework.response import Response
 from app.deals import models
 from app.deals.api import const
 from app.deals.api.tests.common import Deal
-from app.deals.api.tests.factories import DealFactory, CustomerFactory, GemFactory
+from app.deals.api.tests.factories import (CustomerFactory, DealFactory,
+                                           GemFactory)
 from app.deals.api.tests.helpers import fake_decimal
-from django.core.cache import cache
 
 fake = Faker()
 Faker.seed(42)

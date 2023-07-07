@@ -1,5 +1,7 @@
 import datetime
+
 import factory
+
 from app.deals import models
 from app.deals.api.tests.helpers import fake_decimal
 
