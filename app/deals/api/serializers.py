@@ -34,7 +34,7 @@ class TopCustomersSerializer(serializers.ModelSerializer):
     def __init__(self, top_customers, *args, **kwargs):
         super().__init__(top_customers, *args, **kwargs)
 
-        # Здесь мы фильтруем камни, оставляя лишь те, которые есть в списке покупок
+        # Здесь мы фильтруем камни, оставляя лишь те, которые есть
         # как минимум у двух топовых покупателей
         top_customers_ids = [customer.id for customer in top_customers]
         filtered_gems = Gem.objects.annotate(

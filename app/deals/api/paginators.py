@@ -1,7 +1,7 @@
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
 
-from sibdev_job import const
+from app.deals.api import const
 
 
 class SimpleLimitPagination(LimitOffsetPagination):

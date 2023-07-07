@@ -46,7 +46,7 @@ class DealsUploadView(views.APIView):
             })
 
         try:
-            self._parse_deals_data_from_csv(data)
+            rows_count = self._parse_deals_data_from_csv(data)
         except (KeyError, ValueError) as e:
             raise ValidationError({
                 'detail': f'Ошибка в данных: {e.__class__.__name__} ({e})',
@@ -56,6 +56,12 @@ class DealsUploadView(views.APIView):
             raise ValidationError(
                 f'Неизвестная ошибка при обработке файла: {e.__class__.__name__} ({e})'
             )
+
+        if rows_count == 0:
+            raise ValidationError({
+                'detail': 'В файле отсутствуют данные.',
+                'code': 'file_empty',
+            })
 
         # успешно импортировали сделки в базу,
         # нужно очистить кеш страницы с данными о сделках
@@ -69,8 +75,12 @@ class DealsUploadView(views.APIView):
         return Response(status=status.HTTP_200_OK)
 
     @staticmethod
-    def _parse_deals_data_from_csv(data: csv.DictReader):
-        """Логика сохранения информации о сделках."""
+    def _parse_deals_data_from_csv(data: csv.DictReader) -> int:
+        """
+        Логика сохранения информации о сделках.
+        Возвращает количество обработанных записей.
+        """
+        row_counter = 0
         with transaction.atomic():
             for row in data:
                 # TODO: если будет нужна оптимизация, можно сделать следующим образом:
@@ -99,6 +109,8 @@ class DealsUploadView(views.APIView):
                     }
                 )[0]
                 deal.save()
+                row_counter += 1
+        return row_counter
 
 
 class TopCustomersView(generics.ListAPIView):

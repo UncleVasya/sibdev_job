@@ -123,7 +123,8 @@ CACHES = {
 if TESTING:
     from fakeredis import FakeConnection
     CACHES['default']['BACKEND'] = 'django.core.cache.backends.redis.RedisCache'
-    CACHES['default']['OPTIONS']['CONNECTION_CLASS'] = FakeConnection
+    # noinspection PyTypedDict
+    CACHES['default']['OPTIONS'] = {'connection_class': FakeConnection}
 
 
 # Internationalization
