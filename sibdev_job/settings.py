@@ -20,14 +20,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-zkk53o!-et3(9d*$tg)vj5e+g=!sbad6rik&qi6bk9-n&)^qtk'
+SECRET_KEY = os.environ.get('SECRET_KEY', default='woof')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # TODO: использовать environ
 DEBUG = int(os.getenv('DEBUG', 1))
 TESTING = int(os.getenv('TESTING', 0))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', default='localhost').split(' ')
 
 REDIS_URL = os.getenv('REDIS_URL', 'redis://redis:6379/0')
 
@@ -86,8 +86,12 @@ WSGI_APPLICATION = 'sibdev_job.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'postgresql'),
+        'USER': os.environ.get('DB_USER', 'postgresql'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'postgresql'),
+        'HOST': os.environ.get('DB_HOST', 'db'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 

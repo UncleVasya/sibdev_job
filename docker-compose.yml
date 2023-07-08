@@ -29,7 +29,7 @@ services:
 
   autotests:
     <<: *python-containers
-    command: python manage.py test
+    command: bash -c "coverage run manage.py test && coverage report"
     depends_on:
       - db
     environment:

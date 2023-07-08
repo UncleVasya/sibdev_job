@@ -5,7 +5,7 @@ run:
 	docker-compose up web
 
 test:
-	docker-compose run autotests bash -c "coverage run manage.py test && coverage report"
+	docker-compose up autotests
 
 bash:
 	docker-compose run web bash

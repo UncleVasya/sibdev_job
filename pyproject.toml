@@ -17,6 +17,7 @@ faker = "^18.11.2"
 coverage = "^7.2.7"
 fakeredis = "^2.16.0"
 factory-boy = "^3.2.1"
+psycopg2-binary = "^2.9.6"
 
 
 [build-system]

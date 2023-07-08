@@ -127,7 +127,7 @@ class TopCustomersView(generics.ListAPIView):
 
     def get_queryset(self):
         qs = Customer.objects.annotate(
-            spent_money=Sum('deals__total_cost'),
+            spent_money=Sum('deals__total_cost', default=0),
         ).order_by('-spent_money')
 
         return qs
